@@ -42,7 +42,8 @@ module.exports = {
   },
   updateById: (req, res, next) => {
     noteModel.findByIdAndUpdate(req.params.noteId, {
-      name: req.body.name
+      name: req.body.name,
+      content: req.body.content
     }, (err, noteInfo) => {
       if (err)
         next(err);
