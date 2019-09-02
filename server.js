@@ -7,7 +7,6 @@ const users = require('./routes/users');
 const notes = require('./routes/notes');
 
 const mongoose = require('./config/database');
-var jwt = require('jsonwebtoken');
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('jwtSecretKey', 'kunciRahasia');
 
@@ -17,6 +16,16 @@ mongoose.connection.on('error',
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+// Allow CORS
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, authorization, x-access-token');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.get('/', (req, res) => {
  res.json({"message" : "Hello world!"});
@@ -25,19 +34,7 @@ app.get('/', (req, res) => {
 app.use('/users', users);
 
 //
-app.use('/notes', validateUser, notes);
-
-//
-function validateUser(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('jwtSecretKey'), (err, decoded) =>  {
-    if (err) {
-      res.status(401).json({status:"error", message: 'Unauthorized', data:null});
-    } else {
-      req.body.userId = decoded.id;
-      next();
-    }
-  });
-}
+app.use('/notes', notes);
 
 app.use((req, res, next) => {
   let err = new Error('Not Found');
