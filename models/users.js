@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 const Schema = mongoose.Schema;
 
+// Skema
 const schema = new Schema({
   name: {
     type: String,
@@ -41,6 +41,7 @@ const schema = new Schema({
   }
 });
 
+// Setel waktu modifikasi dan hash sandi
 schema.pre('save', function(next) {
   this.modifiedAt = new Date();
   this.password = bcrypt.hashSync(this.password, saltRounds);

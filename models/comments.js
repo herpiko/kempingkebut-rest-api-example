@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const paginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
+// Skema
 const schema = new Schema({
   body: {
     type: String,
@@ -30,8 +31,10 @@ const schema = new Schema({
   }
 });
 
+// Plugin yang membantu paginasi
 schema.plugin(paginate);
 
+// Setel waktu modifikasi
 schema.pre('save', function(next) {
   this.modifiedAt = new Date();
   next();
