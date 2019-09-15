@@ -4,12 +4,13 @@
   "main": "server.js",
   "scripts": {
     "serve": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha tests --exit"
   },
   "author": "Herpiko Dwi Aguno <herpiko@gmail.com>",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -18,7 +19,10 @@
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.0",
     "mongoose": "^5.6.11",
+    "mongoose-paginate-v2": "^1.3.0",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "randomatic": "^3.1.1",
+    "randomstring": "^1.1.5"
   }
 }

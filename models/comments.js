@@ -1,32 +1,21 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
+const paginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  name: {
+  body: {
     type: String,
     trim: true,
     required: true,
   },
-  email: {
+  postId: {
     type: String,
     trim: true,
     required: true
   },
-  password: {
+  userId: {
     type: String,
     trim: true,
-    required: true
-  },
-  registrationChallenge: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  registrationConfirmed: {
-    type: Boolean,
     required: true
   },
   createdAt: {
@@ -41,9 +30,10 @@ const schema = new Schema({
   }
 });
 
+schema.plugin(paginate);
+
 schema.pre('save', function(next) {
   this.modifiedAt = new Date();
-  this.password = bcrypt.hashSync(this.password, saltRounds);
   next();
 });
 
@@ -51,4 +41,4 @@ schema.virtual('id').get(function(){
     return this._id.toHexString();
 });
 
-module.exports = mongoose.model('User', schema);
+module.exports = mongoose.model('Comment', schema)

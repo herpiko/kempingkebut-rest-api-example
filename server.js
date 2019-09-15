@@ -1,18 +1,24 @@
 const express = require('express'); 
+const mongoose = require('mongoose');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const app = express();app.use(logger('dev'));
 const users = require('./routes/users');
-//
-const notes = require('./routes/notes');
+const config = require('./config');
+const posts = require('./routes/posts');
 
-const mongoose = require('./config/database');
-app.use(bodyParser.urlencoded({extended: false}));
-app.set('jwtSecretKey', 'kunciRahasia');
-
+mongoose.connect(config.mongoDbUrl, {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+});
 mongoose.connection.on('error',
   console.error.bind(console, 'MongoDB connection error:')
 );
+
+module.exports = config;
+app.use(bodyParser.urlencoded({extended: false}));
+app.set('jwtSecretKey', 'kunciRahasia');
+
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -34,7 +40,7 @@ app.get('/', (req, res) => {
 app.use('/users', users);
 
 //
-app.use('/notes', notes);
+app.use('/posts', posts);
 
 app.use((req, res, next) => {
   let err = new Error('Not Found');
